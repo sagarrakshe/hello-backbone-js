@@ -9,10 +9,27 @@
     <script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
     <script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.6/underscore-min.js"></script>
     <script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.3.3/backbone-min.js"></script>
-    
     <script>
-    
-    </script>
 
+    (function($) {
+        var ListView = Backbone.View.extend({
+            el: $('body'),                  //attaches this.el to an exsiting element
+
+            initialize: function() {
+                _.bindAll(this, 'render');  //fixes loss of context for 'this' within methods
+
+                this.render();
+            },
+
+            render: function() {
+                $(this.el).append("<ul><li>Hello World</li></ul>");
+            },
+
+        });
+
+        var listView = new ListView();
+    })(jQuery);
+
+    </script>
 </body>
 </html>
