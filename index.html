@@ -15,16 +15,26 @@
         var ListView = Backbone.View.extend({
             el: $('body'),                  //attaches this.el to an exsiting element
 
+            events: {
+                'click button#add': 'addItem',  //call 'addItem' on click 'add'(id) button 
+            },
+
             initialize: function() {
-                _.bindAll(this, 'render');  //fixes loss of context for 'this' within methods
+                _.bindAll(this, 'render', 'addItem');  // every function that uses 'this' as the current object should be in this list
 
                 this.render();
+                this.counter=0;
             },
 
             render: function() {
-                $(this.el).append("<ul><li>Hello World</li></ul>");
+                $(this.el).append('<button id="add">Add List Item</button>');
+                $(this.el).append('<ul></ul>');
             },
 
+            addItem: function() {
+                this.counter++;
+                $('ul',this.el).append("<li>Hello World "+this.counter+"</li>")
+            },
         });
 
         var listView = new ListView();
