@@ -12,6 +12,17 @@
     <script>
 
     (function($) {
+        var Item = Backbone.Model.extend({
+            defaults: {
+                part1: 'Hello',
+                part2: 'World'
+            },
+        });
+
+        var List = Backbone.Collection.extend({
+            model: Item
+        });
+
         var ListView = Backbone.View.extend({
             el: $('body'),                  //attaches this.el to an exsiting element
 
@@ -20,21 +31,39 @@
             },
 
             initialize: function() {
-                _.bindAll(this, 'render', 'addItem');  // every function that uses 'this' as the current object should be in this list
+                _.bindAll(this, 'render', 'addItem', 'appendItem');  // every function that uses 'this' as the current object should be in this list
+
+                this.collection = new List();
+                this.collection.bind('add',this.appendItem);
 
                 this.render();
                 this.counter=0;
             },
 
             render: function() {
+                var self = this;
+
                 $(this.el).append('<button id="add">Add List Item</button>');
                 $(this.el).append('<ul></ul>');
+
+                _(this.collection.models).each(function(item) {
+                    self.appendItem(item);
+                },this);
             },
 
             addItem: function() {
                 this.counter++;
-                $('ul',this.el).append("<li>Hello World "+this.counter+"</li>")
+                var item = new Item();
+                item.set({
+                    part2: item.get('part2') + this.counter
+                });
+
+                this.collection.add(item);
             },
+
+            appendItem: function(item) {
+                $('ul',this.el).append("<li>"+item.get('part1')+" "+item.get('part2')+"</li>");
+            }
         });
 
         var listView = new ListView();
